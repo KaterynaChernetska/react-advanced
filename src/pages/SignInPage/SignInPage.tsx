@@ -10,7 +10,7 @@ const SignInPage: FC = () => {
       <h1 className="visually-hidden">Travel App</h1>
       <SignInForm/>
       <span>
-        Don't have an account?
+        Don't have an account?{' '}
         <Link
           data-test-id="auth-sign-up-link"
           to={PageRoutes.SignUp}
