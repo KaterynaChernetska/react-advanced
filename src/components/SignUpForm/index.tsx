@@ -6,7 +6,6 @@ import { PageRoutes } from "../../enums/routes.enum";
 import { useDispatch } from "react-redux";
 import { signUpNewUser } from "../../redux/auth/operations";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
 import { AppDispatch } from "../../redux/store";
 import Notiflix from "notiflix";
 
@@ -47,15 +46,12 @@ export const SignUpForm: FC = () => {
       );
     }
 
-    toast.error("Oops! Something went wrong..", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-
     const userData = {
       fullName,
       email,
       password,
     };
+    
     const actionResult = await dispatch(signUpNewUser(userData));
     const user = unwrapResult(actionResult);
 

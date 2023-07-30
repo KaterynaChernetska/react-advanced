@@ -8,16 +8,16 @@ import {
 } from "../../types/auth";
 import { Storage } from "../../enums/storage.enum";
 import { removeItem, setItem } from "../../helpers/storageHepleps";
-import { loadUser, signIn, signUp, userSignOut } from "../../services/auth";
-import { actionTypes } from "../../enums/actionsTypes.enum";
+import { loadUser, signIn, signUp } from "../../services/auth";
+import { ActionTypes } from "../../enums/actionsTypes.enum";
 import Notiflix from "notiflix";
-
+import { errorHandler } from "../../helpers/errorHelper";
 
 export const signUpNewUser = createAsyncThunk<
   AuthUserReturnType | void,
   SignUpUser
 >(
-  actionTypes.SIGN_UP,
+  ActionTypes.SIGN_UP,
   async ({ fullName, email, password }: SignUpUser, { rejectWithValue }) => {
     try {
       const user = await signUp({
@@ -29,7 +29,7 @@ export const signUpNewUser = createAsyncThunk<
       return user;
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
-      console.log(error.status);
+      console.log(error);
       return rejectWithValue(error.status);
     }
   }
@@ -39,13 +39,14 @@ export const signInUser = createAsyncThunk<
   AuthUserReturnType | void,
   SignInUser
 >(
-  actionTypes.SIGN_IN,
+  ActionTypes.SIGN_IN,
   async ({ email, password }: SignInUser, { rejectWithValue }) => {
     try {
       const user = await signIn({ email, password });
       setItem(Storage.USER_TOKEN, user.token);
       return user;
     } catch (error: any) {
+      console.log(error);
       Notiflix.Notify.failure("Oops! Something went wrong..");
       return rejectWithValue(error.status);
     }
@@ -53,26 +54,28 @@ export const signInUser = createAsyncThunk<
 );
 
 export const signOut = createAsyncThunk<void, void>(
-  actionTypes.SIGN_OUT,
+  ActionTypes.SIGN_OUT,
   async (_, { rejectWithValue }) => {
     try {
-      await userSignOut();
+      //   await userSignOut();
       removeItem(Storage.USER_TOKEN);
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
+      errorHandler(error.status);
       return rejectWithValue(error.status);
     }
   }
 );
 
 export const loadUserInfo = createAsyncThunk<User, void>(
-  actionTypes.USER_INFO,
+  ActionTypes.USER_INFO,
   async (_, { rejectWithValue }) => {
     try {
       const user = await loadUser();
       return user;
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
+      errorHandler(error.status);
       return rejectWithValue(error.status);
     }
   }
