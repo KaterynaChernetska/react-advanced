@@ -3,9 +3,16 @@ import { Input } from "../Input";
 import "./signUpForm.scss";
 import { useNavigate } from "react-router-dom";
 import { PageRoutes } from "../../enums/routes.enum";
+import { useDispatch } from "react-redux";
+import { signUpNewUser } from "../../redux/auth/operations";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { AppDispatch } from "../../redux/store";
+import Notiflix from "notiflix";
 
 export const SignUpForm: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,19 +35,37 @@ export const SignUpForm: FC = () => {
     setPassword(event.target.value);
   };
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleFormSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
+
     if (password.length < 3 || password.length > 20) {
       navigate(PageRoutes.SignUp);
-      return alert(
+      return Notiflix.Notify.warning(
         "Password must contain at least 3 characters and a maximum of 20 characters"
       );
     }
+
+    toast.error("Oops! Something went wrong..", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+
+    const userData = {
+      fullName,
+      email,
+      password,
+    };
+    const actionResult = await dispatch(signUpNewUser(userData));
+    const user = unwrapResult(actionResult);
+
+    if (user?.token) {
+      navigate(PageRoutes.Index);
+    }
+
     setFullName("");
     setEmail("");
     setPassword("");
-
-    navigate(PageRoutes.Index);
   };
 
   return (

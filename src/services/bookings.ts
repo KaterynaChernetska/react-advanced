@@ -1,30 +1,22 @@
-import Bookings from "../data/mockData/bookings.json";
-import { Booking } from "../types/types";
+import { ApiMethods } from "../enums/api.enums";
+import { Enpoint } from "../enums/endpoinds";
+import { callApi } from "../helpers/apiHelper";
+import { Booking, NewBooking } from "../types/types";
 
-const bookingsCopy = Bookings.slice();
 
-const getBookings = () => {
-  return bookingsCopy;
+export const getBookings = async (): Promise<Booking[]> => {
+  const bookings = await callApi(Enpoint.BOOKINGS, ApiMethods.GET);
+  return bookings;
 };
 
-const getBookingById = (id: string) => {
-  return bookingsCopy.find((booking) => booking.id === id);
+export const removeBooking = async (id: string): Promise<string> => {
+  const res = await callApi(`${Enpoint.BOOKINGS}/${id}`, ApiMethods.DELETE);
+  return res;
 };
 
-const createBooking = (booking: Booking) => {
-  bookingsCopy.push(booking);
+export const createBooking = async (booking: NewBooking): Promise<Booking> => {
+  const newBooking = await callApi(Enpoint.BOOKINGS, ApiMethods.POST, booking);
+  return newBooking;
 };
 
-const deleteBooking = (id: string) => {
-  const index = bookingsCopy.findIndex((booking) => booking.id === id);
 
-  if (index !== -1) {
-    bookingsCopy.splice(index, 1);
-
-    return [...bookingsCopy];
-  }
-
-  return bookingsCopy;
-};
-
-export { getBookings, getBookingById, createBooking, deleteBooking };

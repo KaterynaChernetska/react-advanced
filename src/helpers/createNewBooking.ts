@@ -7,7 +7,7 @@ export const createNewBooking = (
   date: string
 ) => {
   const numberOfGuests = parseInt(guests, 10);
-  const trip = getTripById(tripId) as Trip;
+  const trip = getTripById(tripId) as unknown as Trip;
   const newBooking = {
     id: crypto.randomUUID(),
     userId: crypto.randomUUID(),

@@ -61,7 +61,7 @@ const TripPage: FC = () => {
       {isModalOpen && (
         <Modal
           onClose={onClose}
-          tripId={tripId}
+          tripId={tripId?.toString() as string}
           title={title}
           price={price}
           duration={duration}
