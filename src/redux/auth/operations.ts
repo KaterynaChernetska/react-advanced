@@ -8,10 +8,10 @@ import {
 } from "../../types/auth";
 import { Storage } from "../../enums/storage.enum";
 import { removeItem, setItem } from "../../helpers/storageHepleps";
-import { loadUser, signIn, signUp, userSignOut } from "../../services/auth";
+import { loadUser, signIn, signUp } from "../../services/auth";
 import { actionTypes } from "../../enums/actionsTypes.enum";
 import Notiflix from "notiflix";
-
+import { errorHandler } from "../../helpers/errorHelper";
 
 export const signUpNewUser = createAsyncThunk<
   AuthUserReturnType | void,
@@ -29,7 +29,7 @@ export const signUpNewUser = createAsyncThunk<
       return user;
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
-      console.log(error.status);
+      console.log(error);
       return rejectWithValue(error.status);
     }
   }
@@ -46,6 +46,7 @@ export const signInUser = createAsyncThunk<
       setItem(Storage.USER_TOKEN, user.token);
       return user;
     } catch (error: any) {
+        console.log(error);
       Notiflix.Notify.failure("Oops! Something went wrong..");
       return rejectWithValue(error.status);
     }
@@ -56,10 +57,11 @@ export const signOut = createAsyncThunk<void, void>(
   actionTypes.SIGN_OUT,
   async (_, { rejectWithValue }) => {
     try {
-      await userSignOut();
+      //   await userSignOut();
       removeItem(Storage.USER_TOKEN);
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
+      errorHandler(error.status);
       return rejectWithValue(error.status);
     }
   }
@@ -73,6 +75,7 @@ export const loadUserInfo = createAsyncThunk<User, void>(
       return user;
     } catch (error: any) {
       Notiflix.Notify.failure("Oops! Something went wrong..");
+      errorHandler(error.status);
       return rejectWithValue(error.status);
     }
   }

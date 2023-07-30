@@ -1,54 +1,46 @@
-import { FC, useState } from "react";
+import { FC, ChangeEvent } from "react";
 import "./filter.scss";
+import { useDispatch, useSelector } from "react-redux";
 import { SearchInput } from "../SearchInput";
-interface TripFilterProps {
-  onFilter: (searchTerm: string, duration: string, difficulty: string) => void;
-}
-export const Filter: FC<TripFilterProps> = ({ onFilter }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [duration, setDuration] = useState("");
-  const [level, setLevel] = useState("");
+import { RootState, AppDispatch } from "../../redux/store";
+import { updateFilter } from "../../redux/filter/operation";
+import { getAllTrips } from "../../redux/trips/operations";
+// interface TripFilterProps {
+//   onFilter: (searchTerm: string, duration: string, difficulty: string) => void;
+// }
+export const Filter: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { search, duration, level } = useSelector(
+    (state: RootState) => state.filter
+  );
 
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSearchQuery(event.target.value);
-    onFilter(event.target.value, duration, level);
+  const handleFilterPanel = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    dispatch(updateFilter({ name, value }));
+    dispatch(getAllTrips({ search, duration, level }));
   };
-
-  const handleDuractionChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ): void => {
-    setDuration(event.target.value);
-    onFilter(searchQuery, event.target.value, level);
-  };
-
-  const handleLevelChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ): void => {
-    setLevel(event.target.value);
-    onFilter(searchQuery, duration, event.target.value);
-  };
-
   return (
     <section className="trips-filter">
       <h2 className="visually-hidden">Trips filter</h2>
       <form className="trips-filter__form" autoComplete="off">
         <SearchInput
-          value={searchQuery}
+          value={search}
           testId="filter-search"
           name="search"
           type="search"
           placeholder="search by title"
           title="Search by name"
-          onChange={handleSearchInputChange}
+          onChange={handleFilterPanel}
         />
         <label className="select">
           <span className="visually-hidden">Search by duration</span>
           <select
             data-test-id="filter-duration"
             name="duration"
-            onChange={handleDuractionChange}
+            onChange={handleFilterPanel}
+            value={duration}
           >
             <option value="">duration</option>
             <option value="0_x_5">&lt; 5 days</option>
@@ -61,7 +53,8 @@ export const Filter: FC<TripFilterProps> = ({ onFilter }) => {
           <select
             data-test-id="filter-level"
             name="level"
-            onChange={handleLevelChange}
+            onChange={handleFilterPanel}
+            value={level}
           >
             <option value="">level</option>
             <option value="easy">easy</option>

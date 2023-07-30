@@ -3,9 +3,16 @@ import { Input } from "../Input";
 import "./signInForm.scss";
 import { useNavigate } from "react-router-dom";
 import { PageRoutes } from "../../enums/routes.enum";
+import Notiflix from "notiflix";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { signInUser } from "../../redux/auth/operations";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export const SignInForm: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,12 +28,26 @@ export const SignInForm: FC = () => {
     setPassword(event.target.value);
   };
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleFormSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     if (password.length < 3 || password.length > 20) {
-      return alert(
+      return Notiflix.Notify.warning(
         "Password must contain at least 3 characters and a maximum of 20 characters"
       );
+    }
+
+    const userData = {
+      email,
+      password,
+    };
+
+    const actionResult = await dispatch(signInUser(userData));
+    const user = unwrapResult(actionResult);
+
+    if (user?.token) {
+      navigate(PageRoutes.Index);
     }
     setEmail("");
     setPassword("");
