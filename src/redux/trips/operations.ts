@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { actionTypes } from "../../enums/actionsTypes.enum";
+import { ActionTypes } from "../../enums/actionsTypes.enum";
 import { errorHandler } from "../../helpers/errorHelper";
 import { Trip } from "../../types/types";
 import { getTrips } from "../../services/trips";
@@ -17,7 +17,7 @@ interface TripsFilterState {
 }
 
 export const getAllTrips = createAsyncThunk<Trip[] | void, TripsFilterState>(
-  actionTypes.GET_TRIPS,
+  ActionTypes.GET_TRIPS,
   async (filters: TripsFilterState, { rejectWithValue }) => {
     try {
       const response = await getTrips();

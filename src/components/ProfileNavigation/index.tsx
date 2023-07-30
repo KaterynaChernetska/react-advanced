@@ -7,14 +7,13 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { signOut } from "../../redux/auth/operations";
 
 export const ProfileNavigation: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const {
     loading,
     user: { fullName },
   } = useSelector((state: RootState) => state.auth);
 
-
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   const onLogOutClick = () => {
     dispatch(signOut());
