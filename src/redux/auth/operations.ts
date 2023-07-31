@@ -74,7 +74,6 @@ export const loadUserInfo = createAsyncThunk<User, void>(
       const user = await loadUser();
       return user;
     } catch (error: any) {
-      Notiflix.Notify.failure("Oops! Something went wrong..");
       errorHandler(error.status);
       return rejectWithValue(error.status);
     }

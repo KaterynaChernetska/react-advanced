@@ -1,32 +1,30 @@
-import { createNewBooking } from "../../helpers/createNewBooking";
-import { createBooking } from "../../services/bookings";
 import { Input } from "../Input";
 import { TripInfo } from "../TripInfo";
-import { FC, FormEvent, useState } from "react";
+import Notiflix from "notiflix";
+import { FC, FormEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import {
+  clearForm,
+  setModalClose,
+  updateDate,
+  updatePeople,
+} from "../../redux/modal/operations";
 
-interface BookTripFormProps {
-  title: string;
-  duration: number;
-  level: string;
-  price: number;
-  tripId: string;
-  onClose: () => void;
-}
+export const BookTripForm: FC = () => {
+  const { date, people } = useSelector(
+    (state: RootState) => state.ModalReducer
+  );
+  const dispatch = useDispatch<AppDispatch>();
+  const {
+    loading,
+    trip: { title, duration, level, price, description, image, id },
+  } = useSelector((state: RootState) => state.tripByIdReducer);
 
-export const BookTripForm: FC<BookTripFormProps> = ({
-  title,
-  duration,
-  level,
-  price,
-  tripId,
-  onClose,
-}) => {
-  const [date, setDate] = useState("");
-  const [people, setPeople] = useState("1");
   const onNumberOfGuestsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPeople(event.target.value);
+    dispatch(updatePeople(event.target.value));
   };
 
   const onDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,16 +38,17 @@ export const BookTripForm: FC<BookTripFormProps> = ({
     const tomorrowFormatted = `${year}-${month}-${day}`;
 
     if (event.target.value < tomorrowFormatted) {
-      return alert("Please select valid date");
+      return Notiflix.Notify.warning("Please select valid date");
     }
 
-    setDate(event.target.value);
+    dispatch(updateDate(event.target.value));
   };
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onClose();
-    const newBooking = createNewBooking(tripId, people, date);
-    createBooking(newBooking);
+    dispatch(setModalClose());
+    // const newBooking = createNewBooking(tripId, people, date);
+    // createBooking(newBooking);
+    dispatch(clearForm());
   };
 
   return (
