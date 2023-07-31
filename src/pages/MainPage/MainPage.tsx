@@ -13,11 +13,11 @@ const MainPage: FC = () => {
 
   const loading = useSelector(selectLoading);
   const trips = useSelector(selectTrips);
-  const filter = useSelector(selectFilter);
+  const { search, duration, level } = useSelector(selectFilter);
 
   useEffect(() => {
-    dispatch(getAllTrips(filter));
-  }, [dispatch, filter]);
+    dispatch(getAllTrips({ search, duration, level }));
+  }, [dispatch, search, level, duration]);
 
   return (
     <main>

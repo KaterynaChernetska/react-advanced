@@ -22,7 +22,7 @@ const filterTrips = (filters: TripsFilterState, trips: Trip[]): Trip[] => {
         matchDuration = trip.duration >= 5 && trip.duration < 10;
         break;
       case "10_x":
-        matchDuration = trip.duration >= 10;
+        matchDuration =  trip.duration >= 10;
         break;
       default:
         matchDuration = true;

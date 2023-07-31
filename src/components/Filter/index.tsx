@@ -11,13 +11,14 @@ export const Filter: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { search, duration, level } = useSelector(selectFilter);
 
-  const handleFilterPanel = (
+  const handleFilterPanel = async (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
     dispatch(updateFilter({ name, value }));
-    dispatch(getAllTrips({ search, duration, level }));
+    await dispatch(getAllTrips({ search, duration, level })).unwrap();
   };
+
   return (
     <section className="trips-filter">
       <h2 className="visually-hidden">Trips filter</h2>

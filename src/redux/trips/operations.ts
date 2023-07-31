@@ -13,15 +13,16 @@ interface TripsFilterState {
 }
 
 export const getAllTrips = createAsyncThunk<Trip[] | void, TripsFilterState>(
-  ActionTypes.GET_TRIPS,
-  async (filters: TripsFilterState, { rejectWithValue }) => {
-    try {
-      const response = await getTrips();
-      const trips = filterTrips(filters, response);
-      return trips;
-    } catch (error: any) {
-      errorHandler(error.status);
-      return rejectWithValue(error.status);
+    ActionTypes.GET_TRIPS,
+    async (filters: TripsFilterState, { rejectWithValue }) => {
+      try {
+        const response = await getTrips();
+        const filteredTrips = filterTrips(filters, response);
+        return filteredTrips;
+      } catch (error: any) {
+        errorHandler(error.status);
+        return rejectWithValue(error.status);
+      }
     }
-  }
-);
+  );
+  

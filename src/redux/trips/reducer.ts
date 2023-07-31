@@ -14,10 +14,7 @@ const initialState: TripsState = {
 
 const reducer = createReducer(initialState, (builder) => {
   builder.addCase(getAllTrips.fulfilled, (state, action) => {
-    const trips = action.payload as Trip[];
-   
-
-    state.trips = trips;
+    state.trips = action.payload as Trip[];
     state.loading = false;
   });
 
