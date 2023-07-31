@@ -1,6 +1,9 @@
 import { FC } from "react";
 import "./bookingsListItem.scss";
 import { formatDateToCustomFormat } from "../../helpers/convertDate";
+import { removeBookingById } from "../../redux/booking/operstions";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 
 interface BookingsListItemProps {
   id: string;
@@ -8,7 +11,6 @@ interface BookingsListItemProps {
   guests: number;
   title: string;
   date: string;
-  handleDeleteButtonClick: (id: string) => void;
 }
 
 export const BookingsListItem: FC<BookingsListItemProps> = ({
@@ -17,8 +19,13 @@ export const BookingsListItem: FC<BookingsListItemProps> = ({
   guests,
   title,
   date,
-  handleDeleteButtonClick,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleDeleteButtonClick = (id: string) => {
+    dispatch(removeBookingById(id));
+  };
+
   return (
     <li data-test-id="booking" className="booking">
       <h3 data-test-id="booking-title" className="booking__title">

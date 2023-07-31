@@ -1,31 +1,28 @@
-import { FC, useState } from "react";
+import { FC, useEffect } from "react";
 import "./bookingsPage.scss";
-import { deleteBooking, getBookings } from "../../services/bookings";
 import { BookingsList } from "../../components/BookingsList";
-import { Booking } from "../../types/types";
-
-const defaultBookings = getBookings();
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { getAllBookings } from "../../redux/booking/operstions";
+import {
+  selectLoading,
+  selectSortedBookings,
+} from "../../redux/booking/selectors";
 
 const BookingsPage: FC = () => {
-  const [bookings, setBookings] = useState<Booking[]>(
-    defaultBookings.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    )
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const bookings = useSelector(selectSortedBookings);
+  const loading = useSelector(selectLoading);
 
-  const handleDeleteButtonClick = (id: string) => {
-    const updatedBookings = deleteBooking(id);
-    setBookings(updatedBookings);
-  };
+  useEffect(() => {
+    dispatch(getAllBookings());
+  }, [dispatch]);
 
   return (
     <main className="bookings-page">
       <h1 className="visually-hidden">Travel App</h1>
       {bookings.length > 0 ? (
-        <BookingsList
-          bookings={bookings}
-          handleDeleteButtonClick={handleDeleteButtonClick}
-        />
+        <BookingsList bookings={bookings} loading={loading} />
       ) : (
         <p>You have no bookings yet</p>
       )}

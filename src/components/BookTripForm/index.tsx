@@ -1,32 +1,32 @@
-import { createNewBooking } from "../../helpers/createNewBooking";
-import { createBooking } from "../../services/bookings";
 import { Input } from "../Input";
 import { TripInfo } from "../TripInfo";
-import { FC, FormEvent, useState } from "react";
+import Notiflix from "notiflix";
+import { FC, FormEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import {
+  clearForm,
+  setModalClose,
+  updateDate,
+  updatePeople,
+} from "../../redux/modal/operations";
+import { createNewBooking } from "../../redux/booking/operstions";
+import { selectDate, selectPeople } from "../../redux/modal/selectors";
+import { selectTrip } from "../../redux/tripById/selectors";
+import { selectUser } from "../../redux/auth/selectors";
 
-interface BookTripFormProps {
-  title: string;
-  duration: number;
-  level: string;
-  price: number;
-  tripId: string;
-  onClose: () => void;
-}
+export const BookTripForm: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
-export const BookTripForm: FC<BookTripFormProps> = ({
-  title,
-  duration,
-  level,
-  price,
-  tripId,
-  onClose,
-}) => {
-  const [date, setDate] = useState("");
-  const [people, setPeople] = useState("1");
+  const date = useSelector(selectDate);
+  const people = useSelector(selectPeople);
+  const { title, duration, level, price, id: tripId } = useSelector(selectTrip);
+  const { id: userId } = useSelector(selectUser);
+
   const onNumberOfGuestsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setPeople(event.target.value);
+    dispatch(updatePeople(event.target.value));
   };
 
   const onDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,16 +40,22 @@ export const BookTripForm: FC<BookTripFormProps> = ({
     const tomorrowFormatted = `${year}-${month}-${day}`;
 
     if (event.target.value < tomorrowFormatted) {
-      return alert("Please select valid date");
+      return Notiflix.Notify.warning("Please select valid date");
     }
-
-    setDate(event.target.value);
+    dispatch(updateDate(event.target.value));
   };
+
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onClose();
-    const newBooking = createNewBooking(tripId, people, date);
-    createBooking(newBooking);
+    dispatch(setModalClose());
+    const newBooking = {
+      tripId,
+      userId,
+      guests: people,
+      date,
+    };
+    dispatch(createNewBooking(newBooking));
+    dispatch(clearForm());
   };
 
   return (
