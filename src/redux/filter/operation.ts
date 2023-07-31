@@ -1,7 +1,10 @@
 import { ActionTypes } from "../../enums/actionsTypes.enum";
-import { UpdateFilter } from "../../types/filter";
 import { createAction, PrepareAction } from "@reduxjs/toolkit";
 
+interface UpdateFilter {
+  name: string;
+  value: string;
+}
 
 export const updateFilter = createAction<PrepareAction<UpdateFilter>, string>(
   ActionTypes.UPDATE_FILTER,

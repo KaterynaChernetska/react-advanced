@@ -1,7 +1,11 @@
-
 import { createReducer } from "@reduxjs/toolkit";
-import { TripsFilterState } from "../../types/filter";
 import { updateFilter } from "./operation";
+
+interface TripsFilterState {
+  search: string;
+  duration: string;
+  level: string;
+}
 
 const initialState: TripsFilterState = {
   search: "",
@@ -16,4 +20,4 @@ const reducer = createReducer(initialState, (builder) => {
   });
 });
 
-export { reducer as filter};
+export { reducer as filter };

@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./tripPage.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { TripInfo } from "../../components/TripInfo";
 import ImageComponent from "../../components/TripImage";
 import TripPrice from "../../components/TripPrice";
@@ -10,16 +10,20 @@ import { Modal } from "../../components/Modal";
 import { getTrip } from "../../redux/tripById/operations";
 import { Spinner } from "../../components/Spinner";
 import { setModalOpen } from "../../redux/modal/operations";
+import { selectIsModalOpen } from "../../redux/modal/selectors";
+import {
+  selectLoadingTripById,
+  selectTrip,
+} from "../../redux/tripById/selectors";
 
 const TripPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tripId } = useParams();
-  
-  const { isModalOpen } = useSelector((state: RootState) => state.ModalReducer);
-  const {
-    loading,
-    trip: { title, duration, level, price, description, image },
-  } = useSelector((state: RootState) => state.tripByIdReducer);
+
+  const isModalOpen = useSelector(selectIsModalOpen);
+  const loading = useSelector(selectLoadingTripById);
+  const { title, duration, level, price, description, image } =
+    useSelector(selectTrip);
 
   const handleModalOpen = () => {
     dispatch(setModalOpen());

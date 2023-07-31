@@ -5,10 +5,8 @@ import { Storage } from "../enums/storage.enum";
 const errorHandler = (status: unknown) => {
   if (status === 401) {
     Notiflix.Notify.failure("You are unauthorized!");
-    removeItem(Storage.USER_TOKEN);
-    
+    removeItem(Storage.USER_TOKEN);    
   } else {
-    console.log(status)
     Notiflix.Notify.failure("Oops! Something went wrong..");
   }
 };
