@@ -1,0 +1,1 @@
+import{j as s}from"./index-4c59b009.js";const x=({heading:t,testId:n,name:a,type:e,required:i,autoComplete:p,value:r,min:u,max:c,onChange:l=()=>{}})=>s.jsxs("label",{className:"input",children:[s.jsx("span",{className:"input__heading",children:t}),s.jsx("input",{"data-test-id":n,name:a,type:e,required:i,autoComplete:p,value:r,onChange:l,min:u,max:c})]});export{x as I};

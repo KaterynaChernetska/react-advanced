@@ -1,0 +1,1 @@
+.sign-in-form{display:flex;flex-direction:column;gap:15px;width:100%;max-width:340px;margin-bottom:30px}.sign-in-form__title{margin:0 0 20px;font-size:24px;text-align:center}.sign-in-page{justify-content:center;align-items:center;padding-bottom:50px}.sign-in-form__link{color:#96daf0;transition:.1s color ease}.sign-in-form__link:hover{color:#7cbcde}

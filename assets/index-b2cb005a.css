@@ -1,0 +1,1 @@
+.input{display:flex;flex-direction:column;gap:5px}.input__heading{font-size:14px;line-height:1}.input input{min-width:160px;min-height:45px;padding:10px 15px;font-size:18px;background-color:#eef8fb;border:none;border-radius:1px;cursor:pointer;-webkit-appearance:none;-moz-appearance:none;appearance:none}.input input::placeholder{color:#242a3a;opacity:.4}
