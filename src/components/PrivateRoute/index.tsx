@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Navigate } from "react-router-dom";
 import { Storage } from "../../enums/storage.enum";
@@ -7,11 +6,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { PageRoutes } from "../../enums/routes.enum";
 
-interface ProtectedRouteProps {
+interface PrivateRoutesProps {
   children: React.ReactNode | JSX.Element;
 }
 
-const PrivateRoute = ({ children }: ProtectedRouteProps) => {
+const PrivateRoute = ({ children }: PrivateRoutesProps) => {
   const token = getItemByKey(Storage.USER_TOKEN);
   const { errorCode } = useSelector((state: RootState) => state.auth);
 

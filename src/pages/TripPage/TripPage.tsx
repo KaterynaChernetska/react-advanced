@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./tripPage.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,28 +9,25 @@ import TripPrice from "../../components/TripPrice";
 import { Modal } from "../../components/Modal";
 import { getTrip } from "../../redux/tripById/operations";
 import { Spinner } from "../../components/Spinner";
+import { setModalOpen } from "../../redux/modal/operations";
 
 const TripPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tripId } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const { isModalOpen } = useSelector((state: RootState) => state.ModalReducer);
+  const {
+    loading,
+    trip: { title, duration, level, price, description, image },
+  } = useSelector((state: RootState) => state.tripByIdReducer);
 
   const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
-
-  const onClose = () => {
-    setIsModalOpen(false);
+    dispatch(setModalOpen());
   };
 
   useEffect(() => {
     dispatch(getTrip(tripId as string));
   }, [dispatch, tripId]);
-
-  const {
-    loading,
-    trip: { title, duration, level, price, description, image },
-  } = useSelector((state: RootState) => state.tripByIdReducer);
 
   return (
     <main className="trip-page">
@@ -70,16 +67,7 @@ const TripPage: FC = () => {
           </div>
         </div>
       )}
-      {isModalOpen && (
-        <Modal
-          onClose={onClose}
-          tripId={tripId?.toString() as string}
-          title={title}
-          price={price}
-          duration={duration}
-          level={level}
-        />
-      )}
+      {isModalOpen && <Modal />}
     </main>
   );
 };

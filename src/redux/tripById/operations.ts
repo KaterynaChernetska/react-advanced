@@ -7,15 +7,12 @@ import { ActionTypes } from "../../enums/actionsTypes.enum";
 
 export const getTrip = createAsyncThunk<Trip | void, string>(
   ActionTypes.GET_TRIP_BY_ID,
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
       const trip = await getTripById(id);
       return trip;
     } catch (error: any) {
       errorHandler(error.status);
-      return rejectWithValue(error.status);
     }
   }
 );
-
-

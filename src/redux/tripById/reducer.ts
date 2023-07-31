@@ -30,9 +30,6 @@ const reducer = createReducer(initialState, (builder) => {
   builder.addCase(getTrip.pending, (state) => {
     state.loading = true;
   });
-  builder.addCase(getTrip.rejected, (state) => {
-    state.loading = false;
-  });
 });
 
 export { reducer as tripByIdReducer };

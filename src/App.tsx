@@ -6,12 +6,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Layout } from "./components/Layout";
 import { Spinner } from "./components/Spinner";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { loadUserInfo } from "./redux/auth/operations";
-import { AppDispatch, RootState } from "./redux/store";
+import { AppDispatch } from "./redux/store";
 import { Storage } from "./enums/storage.enum";
 import { getItemByKey } from "./helpers/storageHepleps";
 
@@ -26,7 +26,6 @@ const App: FC = () => {
   const token = getItemByKey(Storage.USER_TOKEN);
 
   useEffect(() => {
-    // Load user info if token is present
     if (token) {
       dispatch(loadUserInfo());
     }
