@@ -3,13 +3,17 @@ import "./mainPage.scss";
 import { Filter } from "../../components/Filter";
 import { TripsList } from "../../components/TripsList";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { getAllTrips } from "../../redux/trips/operations";
+import { selectLoading, selectTrips } from "../../redux/trips/selectors";
+import { selectFilter } from "../../redux/filter/selectors";
 
 const MainPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { trips, loading } = useSelector((state: RootState) => state.trips);
-  const filter = useSelector((state: RootState) => state.filter);
+
+  const loading = useSelector(selectLoading);
+  const trips = useSelector(selectTrips);
+  const filter = useSelector(selectFilter);
 
   useEffect(() => {
     dispatch(getAllTrips(filter));

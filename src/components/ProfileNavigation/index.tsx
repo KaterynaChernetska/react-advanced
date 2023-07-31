@@ -3,17 +3,16 @@ import "./profileNavigation.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { PageRoutes } from "../../enums/routes.enum";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { signOut } from "../../redux/auth/operations";
+import { selectLoadingAuth, selectUser } from "../../redux/auth/selectors";
 
 export const ProfileNavigation: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const {
-    loading,
-    user: { fullName },
-  } = useSelector((state: RootState) => state.auth);
 
+  const loading = useSelector(selectLoadingAuth);
+  const {fullName} = useSelector(selectUser);
 
   const onLogOutClick = () => {
     dispatch(signOut());

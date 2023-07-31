@@ -3,23 +3,25 @@ import { TripInfo } from "../TripInfo";
 import Notiflix from "notiflix";
 import { FC, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import {
   clearForm,
   setModalClose,
   updateDate,
   updatePeople,
 } from "../../redux/modal/operations";
+import { createNewBooking } from "../../redux/booking/operstions";
+import { selectDate, selectPeople } from "../../redux/modal/selectors";
+import { selectTrip } from "../../redux/tripById/selectors";
+import { selectUser } from "../../redux/auth/selectors";
 
 export const BookTripForm: FC = () => {
-  const { date, people } = useSelector(
-    (state: RootState) => state.ModalReducer
-  );
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    loading,
-    trip: { title, duration, level, price, description, image, id },
-  } = useSelector((state: RootState) => state.tripByIdReducer);
+
+  const date = useSelector(selectDate);
+  const people = useSelector(selectPeople);
+  const { title, duration, level, price, id: tripId } = useSelector(selectTrip);
+  const { id: userId } = useSelector(selectUser);
 
   const onNumberOfGuestsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -40,14 +42,19 @@ export const BookTripForm: FC = () => {
     if (event.target.value < tomorrowFormatted) {
       return Notiflix.Notify.warning("Please select valid date");
     }
-
     dispatch(updateDate(event.target.value));
   };
+
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(setModalClose());
-    // const newBooking = createNewBooking(tripId, people, date);
-    // createBooking(newBooking);
+    const newBooking = {
+      tripId,
+      userId,
+      guests: people,
+      date,
+    };
+    dispatch(createNewBooking(newBooking));
     dispatch(clearForm());
   };
 

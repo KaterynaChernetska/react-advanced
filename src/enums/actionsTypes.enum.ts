@@ -11,6 +11,9 @@ enum ActionTypes {
   UPDATE_MODAL_DATE = "modal/date",
   UPDATE_MODAL_PEOPLE = "modal/people",
   CLEAR_MODAL = "modal/fields/clear",
+  CREATE_BOOKING = "create/new/booking",
+  DELETE_BOOKING_BY_ID = "delete/booking/by/id",
+  GET_ALL_BOOKINGS = "get/all/bookings",
 }
 
 export { ActionTypes };

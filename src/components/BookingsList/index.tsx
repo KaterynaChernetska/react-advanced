@@ -1,30 +1,36 @@
 import { Booking } from "../../types/types";
 import { BookingsListItem } from "../BookingsListItem";
+import { Spinner } from "../Spinner";
 import "./bookingsList.scss";
 import { FC } from "react";
 
 export interface BookingsProps {
   bookings: Booking[];
-  handleDeleteButtonClick: (id: string) => void;
+  loading: boolean;
 }
 
 export const BookingsList: FC<BookingsProps> = ({
   bookings,
-  handleDeleteButtonClick,
+  loading,
 }) => {
   return (
-    <ul className="bookings__list">
-      {bookings.map((booking) => (
-        <BookingsListItem
-          key={booking.id}
-          id={booking.id}
-          totalPrice={booking.totalPrice}
-          guests={booking.guests}
-          title={booking.trip.title}
-          date={booking.date}
-          handleDeleteButtonClick={handleDeleteButtonClick}
-        />
-      ))}
-    </ul>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <ul className="bookings__list">
+          {bookings.map((booking) => (
+            <BookingsListItem
+              key={booking.id}
+              id={booking.id}
+              totalPrice={booking.totalPrice}
+              guests={booking.guests}
+              title={booking.trip.title}
+              date={booking.date}
+            />
+          ))}
+        </ul>
+      )}
+    </>
   );
 };

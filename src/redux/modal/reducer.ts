@@ -38,4 +38,4 @@ const reducer = createReducer(initialState, (builder) => {
   });
 });
 
-export { reducer as ModalReducer };
+export { reducer as modalReducer };

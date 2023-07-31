@@ -2,17 +2,14 @@ import { FC, ChangeEvent } from "react";
 import "./filter.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchInput } from "../SearchInput";
-import { RootState, AppDispatch } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { updateFilter } from "../../redux/filter/operation";
 import { getAllTrips } from "../../redux/trips/operations";
-// interface TripFilterProps {
-//   onFilter: (searchTerm: string, duration: string, difficulty: string) => void;
-// }
+import { selectFilter } from "../../redux/filter/selectors";
+
 export const Filter: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { search, duration, level } = useSelector(
-    (state: RootState) => state.filter
-  );
+  const { search, duration, level } = useSelector(selectFilter);
 
   const handleFilterPanel = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
